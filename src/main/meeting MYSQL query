@@ -1,0 +1,97 @@
+use Assignment5;
+
+Create table Employee(
+    eid int auto_increment primary key,
+    first_name varchar(40),
+    last_Name varchar(30),
+    email varchar(224),
+    project_code int ,
+    location varchar(124) );
+    
+    select * from Employee;
+    
+    
+    
+ create table MeetingDetails(
+ meetingId varchar(30) primary key,
+ meeting_Date date,
+ topicName varchar(40),
+ total_Hours time,
+ eid int, foreign key(eid) references Employee(eid)
+ );
+ 
+ select * from MeetingDetails;
+ 
+ 
+ Create table Participents_Meetings (
+          eid int,
+        meetingId varchar(30) , 
+        time_joined time,
+        time_exited time,
+        duration time,
+        assesment_Score int,
+        foreign key(eid) references Employee(eid),
+        foreign key(meetingId) references MeetingDetails(meetingId)
+    )
+   
+    select * from Participents_Meetings;
+    
+    
+    insert into Employee(
+eid,
+first_name,
+last_name,
+email,
+project_code,
+location) values (1, 'chidananda', 'swamy', 'chidanandaswamy@gmail.com', 121, 'bangalore');
+
+insert into Employee(
+eid,
+first_name,
+last_name,
+email,
+project_code,
+location) values (3, 'chidu', 's', 'swamy@gmail.com', 131, 'banagalore');
+
+
+select * from Employee;
+
+use Assignment5;
+
+insert into MeetingDetails(
+meetingId,
+meeting_Date,
+topicName,
+total_Hours,
+eid) values('m01', "2022-01-01", 'java', "18:24:23", 1);
+
+insert into MeetingDetails(
+meetingId,
+meeting_Date,
+topicName,
+total_Hours,
+eid) values('m05', "2023-02-05", 'python', "12:00:00", 4);
+
+
+
+insert into Participents_Meetings values(1, 'm01', "02:00:00", "02:30:00", "00:30:00", 90);
+
+insert into Participents_Meetings values(2, 'm04', "10:30:00", "12:00:00", "02:30:00", 89);
+
+select * from Participents_Meetings;
+
+
+-- Activity 5
+SELECT * from Employee where eid in (select eid from Participents_Meetings where meetingId in 
+       ( select meetingId from MeetingDetails where topicName = 'java'));
+
+
+-- Activity 6
+SELECT * from Employee where eid in (select eid from Participents_Meetings where meetingId in 
+       ( select meetingId from MeetingDetails where not topicName ='java'));
+
+-- Activity 7
+SELECT * FROM Employee JOIN Participents_Meetings ON Employee.eid = Participents_Meetings.eid WHERE Participents_Meetings.assesment_Score <99;
+
+
+SELECT * from Employee where eid in (select * from MeetingDetails where meetingId="m01");
